@@ -1,36 +1,72 @@
 package user;
 
 import base.UserBaseTest;
-import constants.StatusCodes;
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
+import model.user.UserLoginRequest;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-
-import static data.UserGenerator.credsFrom;
-import static data.UserGenerator.randomUser;
+import static testdata.UserGenerator.*;
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class UserLoginTest extends UserBaseTest {
 
-    // Вход под существующим пользователем
-    @Test
-    public void shouldLoginExistingUser() {
+    @Before
+    public void setUp() {
+        // Пользователь - создаём в @Before
         createdUser = randomUser();
-        accessToken = userSteps.register(createdUser).then().extract().path("accessToken");
+        accessToken = userSteps.register(createdUser)
+                .then()
+                .extract()
+                .path("accessToken");
+    }
 
+    @After
+    public void tearDown() {
+        if (accessToken != null) {
+            userSteps.deleteUser(accessToken);
+        }
+    }
+
+    @Test
+    @DisplayName("Логин существующего пользователя успешен")
+    @Description("Создаём пользователя в @Before и выполняем успешный логин")
+    public void shouldLoginExistingUser() {
         userSteps.login(credsFrom(createdUser))
                 .then()
-                .statusCode(StatusCodes.OK)
+                .statusCode(SC_OK)
                 .body("success", equalTo(true))
                 .body("accessToken", notNullValue())
                 .body("refreshToken", notNullValue());
     }
 
-    // Вход с неверным логином и паролем
     @Test
-    public void shouldNotLoginWithWrongEmailOrPassword() {
-        userSteps.login(new model.user.UserLoginRequest("wrong@yandex.ru", "wrongpass"))
+    @DisplayName("Логин с неверным email возвращает 401")
+    @Description("Передаём неверный email при корректном пароле")
+    public void shouldNotLoginWithWrongEmail() {
+        UserLoginRequest creds = credsFrom(createdUser);
+        creds.setEmail("wrong_" + creds.getEmail());
+
+        userSteps.login(creds)
                 .then()
-                .statusCode(StatusCodes.UNAUTHORIZED)
+                .statusCode(SC_UNAUTHORIZED)
+                .body("success", equalTo(false))
+                .body("message", equalTo("email or password are incorrect"));
+    }
+
+    @Test
+    @DisplayName("Логин с неверным password возвращает 401")
+    @Description("Передаём неверный пароль при корректном email")
+    public void shouldNotLoginWithWrongPassword() {
+        UserLoginRequest creds = credsFrom(createdUser);
+        creds.setPassword("wrong_password");
+
+        userSteps.login(creds)
+                .then()
+                .statusCode(SC_UNAUTHORIZED)
                 .body("success", equalTo(false))
                 .body("message", equalTo("email or password are incorrect"));
     }

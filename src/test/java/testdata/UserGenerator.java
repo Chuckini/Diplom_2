@@ -1,4 +1,4 @@
-package data;
+package testdata;
 
 import model.user.UserCreate;
 import model.user.UserLoginRequest;
@@ -18,8 +18,22 @@ public class UserGenerator {
     public static UserLoginRequest credsFrom(UserCreate user) {
         return new UserLoginRequest(user.getEmail(), user.getPassword());
     }
+    public static UserCreate withoutEmail() {
+        UserCreate user = randomUser();
+        user.setEmail(null);
+        return user;
+    }
 
-    public static UserCreate withoutEmail() { return randomUser().setEmail(null); }
-    public static UserCreate withoutPassword() { return randomUser().setPassword(null); }
-    public static UserCreate withoutName() { return randomUser().setName(null); }
+    public static UserCreate withoutPassword() {
+        UserCreate user = randomUser();
+        user.setPassword(null);
+        return user;
+    }
+
+    public static UserCreate withoutName() {
+        UserCreate user = randomUser();
+        user.setName(null);
+        return user;
+    }
+
 }

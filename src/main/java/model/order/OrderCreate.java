@@ -1,16 +1,14 @@
 package model.order;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderCreate {
     private List<String> ingredients;
-
-    public OrderCreate() {}
-
-    public OrderCreate(List<String> ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public List<String> getIngredients() { return ingredients; }
-    public OrderCreate setIngredients(List<String> ingredients) { this.ingredients = ingredients; return this; }
 }

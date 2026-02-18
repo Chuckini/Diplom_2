@@ -5,9 +5,8 @@ import model.user.UserCreate;
 import model.user.UserLoginRequest;
 import org.junit.After;
 import steps.UserSteps;
-
-import static data.UserGenerator.credsFrom;
-import static data.UserGenerator.randomUser;
+import static testdata.UserGenerator.credsFrom;
+import static testdata.UserGenerator.randomUser;
 
 public class UserBaseTest extends BaseApiTest {
 

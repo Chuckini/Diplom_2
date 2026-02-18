@@ -4,9 +4,6 @@ import constants.Endpoints;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import model.order.OrderCreate;
-
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
 
 public class OrderSteps {
