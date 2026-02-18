@@ -1,7 +1,0 @@
-{
-  "name": "Maven",
-  "type": "maven",
-  "buildName": "local run",
-  "buildUrl": "",
-  "reportUrl": ""
-}
