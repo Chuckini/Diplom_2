@@ -78,11 +78,11 @@ public class OrderCreateTest extends UserBaseTest {
 
     @Test
     @DisplayName("Нельзя создать заказ без ингредиентов")
-    @Description("Отправляем пустой список ингредиентов и ожидаем 400 и сообщение об ошибке")
+    @Description("Отправляем пустой список ингредиентов авторизованным пользователем и ожидаем 400 и сообщение об ошибке")
     public void shouldNotCreateOrderWithoutIngredients() {
         OrderCreate order = new OrderCreate(Collections.<String>emptyList());
 
-        orderSteps.createOrderNoAuth(order)
+        orderSteps.createOrderAuth(accessToken, order)
                 .then()
                 .statusCode(SC_BAD_REQUEST)
                 .body("success", equalTo(false))
@@ -91,13 +91,13 @@ public class OrderCreateTest extends UserBaseTest {
 
     @Test
     @DisplayName("Создание заказа с неверным хешем ингредиента возвращает 500")
-    @Description("Отправляем некорректный id ингредиента и ожидаем 500")
+    @Description("Отправляем некорректный id ингредиента авторизованным пользователем и ожидаем 500")
     public void shouldFailWithInvalidIngredientHash() {
         OrderCreate order = new OrderCreate(
                 Arrays.asList("60d3463f7034a000269f45eZ")
         );
 
-        orderSteps.createOrderNoAuth(order)
+        orderSteps.createOrderAuth(accessToken, order)
                 .then()
                 .statusCode(SC_INTERNAL_SERVER_ERROR);
     }
