@@ -1,4 +1,4 @@
-# 🛴 Stellar Burgers — API Automation Tests (Praktikum)
+#  Stellar Burgers — API Automation Tests (Praktikum)
 
 ---
 
